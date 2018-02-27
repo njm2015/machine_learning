@@ -14,6 +14,10 @@ def lin_reg_h(X, theta):
 
 def sigmoid_h(X, theta):
 	'''
+		Sigmoid/logistic function used compute output of training examples
+		@param X - m x n numpy matrix, training examples
+		@param theta - n x 1 numpy matrix, feature parameters
+		@return - m x 2 numpy matrix, hypothesis result
 	'''
 	return 1 / (1 + np.exp(-1 * lin_reg_h(X, theta)))
 
@@ -24,7 +28,7 @@ def lin_reg_cost(X, y, theta, alpha):
 		@param y - m x 1 numpy matrix training set outputs
 		@param theta - n x 1 numpy matrix, feature parameters to compute cost of
 		@param alpha - learning rate (gradient)
-		@return J - linear cost w.r to feature parameter
+		@return J - linear cost w.r. to feature parameters
 		@return grad - n x 1 numpy matrix, gradient of feature parameters
 	'''
 	m = X.shape[0]
@@ -34,6 +38,15 @@ def lin_reg_cost(X, y, theta, alpha):
 	return J, grad
 
 def log_reg_cost(X, y, theta, alpha):
+	'''
+		Computes logistic regression cost and gradient
+		@param X - m x n numpy matrix (m=training examples, n-1=features)
+		@param y - m x 1 numpy matrix training set outputs
+		@param theta - n x 1 numpy matrix, feature parameters to compute cost of
+		@param alpha - learning rate (gradient)
+		@return J - logistic cost w.r. to feature parameters
+		@return grad - n x 1 numpy matrix, gradient of feature parameters
+	'''
 	m = X.shape[0]
 	g = sigmoid_h(X,theta)
 	J = (1/m)*(-1*y.T*np.log(g) - (1-y).T*np.log(1-g))
@@ -41,7 +54,10 @@ def log_reg_cost(X, y, theta, alpha):
 	return J, grad
 
 def prep_data(X):
-	return np.insert(X, 0, np.ones((X.shape[0],1)), axis=1)
+	return np.insert(X, 0, np.ones(X.shape[0]), axis=1)
+
+def prep_theta(theta):
+	return np.insert(theta, 0, np.matrix([0]), axis=0)
 
 def fminunc(X, y, cost_func, learn_rate, initial_theta, num_iters):
 	'''
@@ -54,7 +70,8 @@ def fminunc(X, y, cost_func, learn_rate, initial_theta, num_iters):
 		@param num_iters - number of iterations to run gradient descent algo
 		@return - n x 1 numpy matrix, finalized feature parameters
 	'''
-	ret_theta = np.matrix(np.copy(initial_theta))
+	X = prep_data(X)
+	ret_theta = prep_theta(initial_theta)
 	J = int()
 	for i in range(num_iters):
 		J, grad = cost_func(X, y, ret_theta, learn_rate)

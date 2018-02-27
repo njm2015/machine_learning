@@ -23,12 +23,12 @@ if __name__ == '__main__':
 
 	'''
 
-	X = np.matrix([[1,0],[1,1],[1,0],[1,1],[1,1],[1,0],[1,0]], dtype=np.float32)
+	X = np.matrix([[0],[1],[0],[1],[1],[0],[0]], dtype=np.float32)
 	y = np.matrix([[0],[1],[0],[1],[1],[0],[0]], dtype=np.float32)
-	theta = np.matrix([[0],[0]], dtype=np.float32)
+	theta = np.matrix([[0]], dtype=np.float32)
 
-	ret_theta, J = gd.fminunc(X, y, gd.log_reg_cost, 0.01, theta, 10000)
+	ret_theta, J = gd.fminunc(X, y, gd.log_reg_cost, 1, theta, 100000)
 
 	print(ret_theta, J)
 
-	print(gd.sigmoid_h(X, ret_theta))
+	print(gd.sigmoid_h(gd.prep_data(X), ret_theta))
